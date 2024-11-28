@@ -4,7 +4,9 @@ require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+const path = require('path')
 // Kết nối database
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -23,7 +25,9 @@ app.get("/users", async (req, res) => {
     res.status(500).send("Error fetching users");
   }
 });
-
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html')); // Use __dirname to get the absolute path
+});
 // Khởi động server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
